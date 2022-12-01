@@ -3,7 +3,7 @@
     ViewBag.Title = "Login";
 }
 
-<h2>Login</h2>
+@*<h2>Login</h2>
 
 @using (Html.BeginForm("Login", "Home", null, FormMethod.Post, new { @class = "row" }))
 {
@@ -32,9 +32,60 @@
                 <div class="col-auto"><a class="fs--1" href="#">Esqueceu a senha?</a></div>
                 <hr />
                 @Html.ActionLink("Criar Conta", "Register", "Home", null, new { @class = "nav-link" })
-
             </div>
         </div>
     </div>
-}
+}*@
 
+
+<section class="banner_area">
+    <div class="booking_table d_flex align-items-center">
+        <div class="overlay bg-parallax " data-stellar-ratio="0.9" data-stellar-vertical-offset="0" data-background=""></div>
+        <div class="container">
+            <div class="banner_content text-center">
+                <h6>Uma no experiência</h6>
+                <h2>Realize o Login</h2>
+                <p>Preencha o formulário abaixo!</p>
+            </div>
+        </div>
+    </div>
+    </section>
+    
+<section class="section-top-border">
+        <div class="container">
+            <div class="card" style="background: #f9f9ff;">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mt-5">
+                            <img class="img-fluid" src="~/Content/image/logo.png" alt="img">
+                        </div>
+                        <div class="col-md-8 mt-5">
+                            <div class="about_content">
+                                @using (Html.BeginForm("Login", "Home", null, FormMethod.Post, new { @class = "row" }))
+                                {
+                                    @Html.AntiForgeryToken()
+
+                                    <div class="row">
+                                        @Html.ValidationSummary(true, "", new { @class = "alert alert-danger text-center", @style = "list-style-type: none" })
+                                        <div class="col-md-6 input-group-icon mt-4">
+                                            <div class="icon"><i class="fa fa-user" aria-hidden="true"></i></div>
+                                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "single-input", @placeholder = "Email" } })
+                                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                        </div>
+                                        <div class="col-md-6 input-group-icon mt-4">
+                                            <div class="icon"><i class="fa fa-user-secret" aria-hidden="true"></i></div>
+                                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "single-input", @placeholder = "Senha" } })
+                                            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                        </div>
+                                        <div class="col-md-12 input-group-icon mt-3">
+                                            <button class="btn d-block w-100 mt-3 book_now_btn button_hover" type="submit" name="submit">Entrar</button>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>

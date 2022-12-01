@@ -18,6 +18,7 @@ namespace Easy.Hosts.Site.Controllers
         public ActionResult Index()
         {
             ViewBag.BedroomId = new SelectList(db.Bedroom, "Id", "NameBedroom");
+            //var listBedroom = db.Bedroom.ToList();
             return View();
         }
 
@@ -81,28 +82,35 @@ namespace Easy.Hosts.Site.Controllers
             return View(user);
         }
 
+        public async Task<ActionResult> Eventos()
+        {
+            var listEvents = await db.Event.ToListAsync();
+            return View(listEvents);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Booking(Booking booking, int userId, DateTime dateCheckin, DateTime dateCheckout)
+        public async Task<ActionResult> Booking(Booking booking, int userId, DateTime dateCheckin, DateTime dateCheckout, int bedroomId)
         {
             booking.CodeBooking = Functions.CodeBookigSort();
             booking.Status = BookingStatus.Voucher;
             booking.DateCheckin = dateCheckin;
             booking.DateCheckout = dateCheckout;
             booking.UserId = userId;
+            booking.BedroomId = bedroomId;
             booking.ValueBooking = Functions.QuantityDaysBooking(dateCheckin, dateCheckout, 250);
 
-            booking.Bedroom.Status = BedroomStatus.Reservado;
+            //booking.Bedroom.Status = BedroomStatus.Reservado;
 
-            db.Entry(booking).State = EntityState.Modified;
+            //db.Entry(booking).State = EntityState.Modified;
             await db.SaveChangesAsync();
 
-            var user = db.User.Where(x => x.Id == booking.UserId).FirstOrDefault();
+            //var user = db.User.Where(x => x.Id == booking.UserId).FirstOrDefault();
 
-            string msg = "<h3>RESERVA DO SITE EASY HOSTS</h3>";
-            msg += "Link para pagamento:  <a href='https://localhost:44348/' target='_blank'>Pagar</a>";
-            msg += "Codigo para o checkin" + booking.CodeBooking;
-            Functions.SendEmail(user.Email, "Link de pagamento da reserva ", msg);
+            //string msg = "<h3>RESERVA DO SITE EASY HOSTS</h3>";
+            //msg += "Link para pagamento:  <a href='https://localhost:44348/' target='_blank'>Pagar</a>";
+            //msg += "Codigo para o checkin" + booking.CodeBooking;
+            //Functions.SendEmail(user.Email, "Link de pagamento da reserva ", msg);
 
 
 

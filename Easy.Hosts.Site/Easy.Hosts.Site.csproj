@@ -146,6 +146,7 @@
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\TypeBedroom.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\ViewModel\SiteViewModel.cs" />
     <Compile Include="Models\ViewModel\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

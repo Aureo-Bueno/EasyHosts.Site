@@ -1,7 +1,19 @@
-﻿@model Easy.Hosts.Site.Models.Booking
+﻿@*@model IEnumerable<Easy.Hosts.Site.Models.ViewModel.SiteViewModel>*@
+@model IEnumerable<Easy.Hosts.Site.Models.Bedroom>
+
 @{
     ViewBag.Title = "Inicio";
 }
+
+<style>
+    .list {
+        margin-right: -1000px;
+    }
+
+        .list > li {
+            display: inline-block;
+        }
+</style>
 
 <!--================Banner Area =================-->
 <section class="banner_area">
@@ -23,37 +35,36 @@
                 @Html.AntiForgeryToken()
                 <input type="hidden" value="@User.Identity.Name.Split('|')[0]" name="userId" />
                 <div class="container">
-                    <div class="hotel_booking_table">
+                    <div class="hotel_booking_table bg-white">
                         <div class="col-md-3">
-                            <h2>Reserve<br> Seu Quarto</h2>
+                            <h2 class="text-dark">Reserve<br> Seu Quarto</h2>
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-md-9 text-dark">
                             <div class="boking_table">
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-8">
                                         <div class="book_tabel_item">
                                             <div class="form-group">
+                                                <div class="input-group">
+                                                    @Html.DropDownList("BedroomId", (SelectList)ViewBag.BedroomId, htmlAttributes: new { @class = "w-100 list-inline", @name = "bedroomId", @placeholder = "Quarto", @style = "" })
+                                                    @*@Html.ValidationMessageFor(model => model.BedroomId, "", new { @class = "text-danger" })*@
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                    </span>
+                                                </div>
                                                 <div class="input-group date" id="datetimepicker11">
                                                     <input type="text" id="dataentrada" name="dateCheckin" class="form-control" placeholder="Data do Checkin..." />
                                                     <span class="input-group-addon">
                                                         <i class="fa fa-calendar" aria-hidden="true"></i>
                                                     </span>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
                                                 <div class="input-group date" id="datetimepicker1">
                                                     <input type="text" name="dateCheckout" class="form-control" placeholder="Data Saída" />
                                                     <span class="input-group-addon">
                                                         <i class="fa fa-calendar" aria-hidden="true"></i>
                                                     </span>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.LabelFor(model => model.BedroomId, "BedroomId", htmlAttributes: new { @class = "control-label col-md-2" })
-                                                <div class="col-md-10">
-                                                    @Html.DropDownList("BedroomId", (SelectList)ViewBag.BedroomId, htmlAttributes: new { @class = "form-control" })
-                                                    @Html.ValidationMessageFor(model => model.BedroomId, "", new { @class = "text-danger" })
-                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -67,18 +78,16 @@
                 </div>
             }
 
-
-
-
         </div>
     }
     else
     {
         <div class="hotel_booking_area position">
             <div class="container">
-                <div class="hotel_booking_table">
-                    <div class="col-md-12">
-                        <h2>Reserve<br> Seu Quarto, Faca seu login</h2>
+                <div class="hotel_booking_table bg-white">
+                    <div class="col-md-12 text-center ">
+                        <h2 class="text-dark">Reserve seu Quarto</h2>
+                        <h6>FAÇA SEU LOGIN</h6>
                     </div>
                 </div>
             </div>
@@ -94,46 +103,44 @@
             <p>We all live in an age that belongs to the young at heart. Life that is becoming extremely fast, </p>
         </div>
         <div class="row mb_30">
-            <div class="col-lg-3 col-sm-6">
-                <div class="accomodation_item text-center">
-                    <div class="hotel_img">
-                        <img src="~/Content/image/quartos/room1.jpg" alt="">
-                        <a href="#" class="btn theme_btn button_hover">Reservar</a>
+            @if (Model.Count() == 0)
+            {
+                <div class="">
+                    <div class="card">
+                        <div class="card-header p-3">
+                            No momento não temos quartos em nosso sistema!
+                        </div>
+                        <div class="card-body p-5">
+                            <p class="card-text">Volte para o menu de opções.</p>
+                            <a href="@Url.Action("Index", "Home", new { area = "" })" class="btn btn-light p-2"><i class="bi bi-house-fill text-dark fs-1"></i></a>
+                        </div>
+                        <div class="card-footer text-muted">
+                            Atualizado em: <strong>@DateTime.Now.ToString("dd/MM/yyyy")</strong>
+                        </div>
                     </div>
-                    <a href="#"><h4 class="sec_h4">Quarto Luxo</h4></a>
-                    <h5>R$150,00<small>/diária</small></h5>
                 </div>
-            </div>
-            <div class="col-lg-3 col-sm-6">
-                <div class="accomodation_item text-center">
-                    <div class="hotel_img">
-                        <img src="~/Content/image/quartos/room2.jpg" alt="">
-                        <a href="#" class="btn theme_btn button_hover">Reservar</a>
+            }
+            else
+            {
+                foreach (var item in Model)
+                {
+                    <div class="d-flex justify-content-center col-sm-6 col-md-4 col-lg-3">
+                        <div class="card rounded-3 m-2" style="width: 16rem;">
+                            <img src="@Html.DisplayFor(modelItem => item.Bedroom.Picture)" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    Nome do quarto:@Html.DisplayFor(modelItem => item.Bedroom.NameBedroom)
+                                </h5>
+                                <p class="card-text">Descrição: @Html.DisplayFor(modelItem => item.Bedroom.Description)</p>
+                                @*<a class="btn btn-primary" title="Detalhes" href="@Url.Action("DetalhesQuarto", "Terminal", new { id = item.Id })">
+                                    Visualizar Quarto
+                                </a>*@
+
+                            </div>
+                        </div>
                     </div>
-                    <a href="#"><h4 class="sec_h4">Quarto Luxo</h4></a>
-                    <h5>R$150,00<small>/diária</small></h5>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6">
-                <div class="accomodation_item text-center">
-                    <div class="hotel_img">
-                        <img src="~/Content/image/quartos/room3.jpg" alt="">
-                        <a href="#" class="btn theme_btn button_hover">Reservar</a>
-                    </div>
-                    <a href="#"><h4 class="sec_h4">Quarto Luxo</h4></a>
-                    <h5>R$150,00<small>/diária</small></h5>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6">
-                <div class="accomodation_item text-center">
-                    <div class="hotel_img">
-                        <img src="~/Content/image/quartos/room4.jpg" alt="">
-                        <a href="#" class="btn theme_btn button_hover">Reservar</a>
-                    </div>
-                    <a href="#"><h4 class="sec_h4">Quarto Luxo</h4></a>
-                    <h5>R$150,00<small>/diária</small></h5>
-                </div>
-            </div>
+                }
+            }
         </div>
     </div>
 </section>
@@ -206,76 +213,8 @@
     </div>
 </section>
 <!--================ About History Area  =================-->
-<!--================ Testimonial Area  =================-->
-<section class="testimonial_area section_gap">
-    <div class="container">
-        <div class="section_title text-center">
-            <h2 class="title_color">FeedBack Hospedes</h2>
-            <p>Lorem ipsum dolor sit amet. Ut vitae enim et dignissimos sunt et sint explicabo ad iste distinctio eum molestiae maxime in odio iste qui consequatur laboriosam. </p>
-        </div>
-        <div class="testimonial_slider owl-carousel">
-            <div class="media testimonial_item">
-                <img class="rounded-circle col-5" src="~/Content/image/devs/romao.jpg" alt="">
-                <div class="media-body">
-                    <p>As conscious traveling Paupers we must always be concerned about our dear Mother Earth. If you think about it, you travel across her face, and She is the </p>
-                    <a href="#"><h4 class="sec_h4">Luiz Romão</h4></a>
-                    <div class="star">
-                        <a href="#"><i class="fa fa-star"></i></a>
-                        <a href="#"><i class="fa fa-star"></i></a>
-                        <a href="#"><i class="fa fa-star"></i></a>
-                        <a href="#"><i class="fa fa-star"></i></a>
-                        <a href="#"><i class="fa fa-star-half-o"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="media testimonial_item">
-                <img class="rounded-circle col-5" src="~/Content/image/devs/aureo.jpg" alt="">
-                <div class="media-body">
-                    <p>As conscious traveling Paupers we must always be concerned about our dear Mother Earth. If you think about it, you travel across her face, and She is the </p>
-                    <a href="#"><h4 class="sec_h4">Aureo Bueno</h4></a>
-                    <div class="star">
-                        <a href="#"><i class="fa fa-star"></i></a>
-                        <a href="#"><i class="fa fa-star"></i></a>
-                        <a href="#"><i class="fa fa-star"></i></a>
-                        <a href="#"><i class="fa fa-star"></i></a>
-                        <a href="#"><i class="fa fa-star-half-o"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="media testimonial_item">
-                <img class="rounded-circle col-5" src="~/Content/image/devs/gui.jpg" alt="">
-                <div class="media-body">
-                    <p>As conscious traveling Paupers we must always be concerned about our dear Mother Earth. If you think about it, you travel across her face, and She is the </p>
-                    <a href="#"><h4 class="sec_h4">Luiz Guilherme</h4></a>
-                    <div class="star">
-                        <a href="#"><i class="fa fa-star"></i></a>
-                        <a href="#"><i class="fa fa-star"></i></a>
-                        <a href="#"><i class="fa fa-star"></i></a>
-                        <a href="#"><i class="fa fa-star"></i></a>
-                        <a href="#"><i class="fa fa-star-half-o"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="media testimonial_item">
-                <img class="rounded-circle col-5" src="~/Content/image/devs/joao.png" alt="">
-                <div class="media-body">
-                    <p>As conscious traveling Paupers we must always be concerned about our dear Mother Earth. If you think about it, you travel across her face, and She is the </p>
-                    <a href="#"><h4 class="sec_h4">João Pedro</h4></a>
-                    <div class="star">
-                        <a href="#"><i class="fa fa-star"></i></a>
-                        <a href="#"><i class="fa fa-star"></i></a>
-                        <a href="#"><i class="fa fa-star"></i></a>
-                        <a href="#"><i class="fa fa-star"></i></a>
-                        <a href="#"><i class="fa fa-star-half-o"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!--================ Testimonial Area  =================-->
 <!--================ Latest Blog Area  =================-->
-<section class="latest_blog_area section_gap">
+<section class="testimonial_area section_gap">
     <div class="container">
         <div class="section_title text-center">
             <h2 class="title_color">Eventos da Cidade</h2>
