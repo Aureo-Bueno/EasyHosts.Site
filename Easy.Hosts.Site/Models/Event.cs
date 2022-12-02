@@ -26,8 +26,7 @@ namespace Easy.Hosts.Site.Models
 
         [MaxLength(100)]
         [DisplayName("Foto")]
-        public string Picture { get; set; }
-        public ICollection<AlbumEvent> AlbumEvent { get; set; }
+        public byte[] Picture { get; set; }
 
         [MaxLength(100, ErrorMessage = "Descricao muito extensa!")]
         [DisplayName("Descrição")]

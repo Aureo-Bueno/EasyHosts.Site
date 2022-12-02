@@ -11,10 +11,6 @@ namespace Easy.Hosts.Site.Models
 
         public DbSet<Event> Event { get; set; }
 
-        public DbSet<AlbumEvent> AlbumEvent { get; set; }
-
-        public DbSet<AlbumBedroom> AlbumBedroom { get; set; }
-
         public DbSet<Booking> Booking { get; set; }
 
         public DbSet<Perfil> Perfil { get; set; }
@@ -49,18 +45,6 @@ namespace Easy.Hosts.Site.Models
             eventBd.Property(x => x.DescriptionEvent).HasColumnName("DESCRIPTION_EVENT");
             eventBd.Property(x => x.Attractions).HasColumnName("ATTRACTIONS");
             eventBd.Property(x => x.TypeEvent).HasColumnName("TYPE_EVENT");
-
-            var albEvent = mb.Entity<AlbumEvent>();
-            albEvent.ToTable("TB_ALBUM_EVENT");
-            albEvent.Property(x => x.Id).HasColumnName("ID");
-            albEvent.Property(x => x.EventId).HasColumnName("EVENT_ID");
-            albEvent.Property(x => x.Picture).HasColumnName("PICTURE");
-
-            var albBedroom = mb.Entity<AlbumBedroom>();
-            albBedroom.ToTable("TB_ALBUM_BEDROOM");
-            albBedroom.Property(x => x.Id).HasColumnName("ID");
-            albBedroom.Property(x => x.BedroomId).HasColumnName("BEDROOM_ID");
-            albBedroom.Property(x => x.Picture).HasColumnName("PICTURE");
 
             var booking = mb.Entity<Booking>();
             booking.ToTable("TB_BOOKING");

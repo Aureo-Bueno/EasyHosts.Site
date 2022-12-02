@@ -131,8 +131,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AlbumBedroom.cs" />
-    <Compile Include="Models\AlbumEvent.cs" />
     <Compile Include="Models\Bedroom.cs" />
     <Compile Include="Models\Booking.cs" />
     <Compile Include="Models\Context.cs" />

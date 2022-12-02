@@ -24,7 +24,7 @@ namespace Easy.Hosts.Site.Models
         public string Description { get; set; }
 
         [DisplayName("Foto")]
-        public string Picture { get; set; }
+        public byte[] Picture { get; set; }
 
         [Required]
         [DisplayName("Status do Quarto")]

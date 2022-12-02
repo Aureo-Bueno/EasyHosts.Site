@@ -17,9 +17,9 @@ namespace Easy.Hosts.Site.Controllers
         private Context db = new Context();
         public ActionResult Index()
         {
+            SiteViewModel siteViewModel = new SiteViewModel();
             ViewBag.BedroomId = new SelectList(db.Bedroom, "Id", "NameBedroom");
-            //var listBedroom = db.Bedroom.ToList();
-            return View();
+            return View(siteViewModel);
         }
 
         public ActionResult Login()
@@ -92,30 +92,44 @@ namespace Easy.Hosts.Site.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Booking(Booking booking, int userId, DateTime dateCheckin, DateTime dateCheckout, int bedroomId)
         {
-            booking.CodeBooking = Functions.CodeBookigSort();
-            booking.Status = BookingStatus.Voucher;
-            booking.DateCheckin = dateCheckin;
-            booking.DateCheckout = dateCheckout;
-            booking.UserId = userId;
-            booking.BedroomId = bedroomId;
-            booking.ValueBooking = Functions.QuantityDaysBooking(dateCheckin, dateCheckout, 250);
+            if (ModelState.IsValid)
+            {
+                if (dateCheckin == null)
+                {
+                    TempData["MSG"] = "info|Preencha a data de checkin";
+                    return RedirectToAction("Index");
+                }
+                Bedroom bedroom = db.Bedroom.Where(w => w.Id == bedroomId).FirstOrDefault();
 
-            //booking.Bedroom.Status = BedroomStatus.Reservado;
+                booking.CodeBooking = Functions.CodeBookigSort();
+                booking.Status = BookingStatus.Voucher;
+                booking.DateCheckin = dateCheckin.AddHours(14);
+                booking.DateCheckout = dateCheckout.AddHours(12);
+                booking.UserId = userId;
+                booking.BedroomId = bedroom.Id;
+                booking.ValueBooking = Functions.QuantityDaysBooking(dateCheckin, dateCheckout, bedroom.Value);
 
-            //db.Entry(booking).State = EntityState.Modified;
-            await db.SaveChangesAsync();
+                db.Booking.Add(booking);
 
-            //var user = db.User.Where(x => x.Id == booking.UserId).FirstOrDefault();
-
-            //string msg = "<h3>RESERVA DO SITE EASY HOSTS</h3>";
-            //msg += "Link para pagamento:  <a href='https://localhost:44348/' target='_blank'>Pagar</a>";
-            //msg += "Codigo para o checkin" + booking.CodeBooking;
-            //Functions.SendEmail(user.Email, "Link de pagamento da reserva ", msg);
+                bedroom.Status = BedroomStatus.Reservado;
+                db.Entry(bedroom).State = EntityState.Modified;
+                await db.SaveChangesAsync();
 
 
+                //string msg = "<h3>RESERVA DO SITE EASY HOSTS</h3>";
+                //msg += "Link para pagamento:  <a href='https://localhost:44348/' target='_blank'>Pagar</a>";
+                //msg += "Codigo para o checkin" + booking.CodeBooking;
+                //Functions.SendEmail(user.Email, "Link de pagamento da reserva ", msg);
 
-            TempData["MSG"] = "success|Reserva realizada com sucesso, segue em seu email o link de pagamento";
+
+
+                TempData["MSG"] = "success|Reserva realizada com sucesso, verifique seu email o link de pagamento";
+                return RedirectToAction("Index");
+            }
+
+            TempData["MSG"] = "info|Erro ao fazer a reserva, verifique os campos e tente novamente";
             return RedirectToAction("Index");
+
         }
 
         public ActionResult Error(string message)
@@ -126,6 +140,16 @@ namespace Easy.Hosts.Site.Controllers
             };
             return View(viewModel);
         }
+
+
+        //GET: PEGA O ID DO QUARTO E CONVERTE OS BYTES DO BANCO PARA O TIPO 'image/jpeg'
+        public FileContentResult GetImageBedroom(int id)
+        {
+            byte[] byteArray = db.Bedroom.Find(id).Picture;
+
+            return byteArray != null ? new FileContentResult(byteArray, "image/jpeg") : null;
+        }
+
 
 
     }
