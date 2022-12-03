@@ -4,15 +4,6 @@
     ViewBag.Title = "Inicio";
 }
 
-<style>
-    .list {
-        margin-right: -1000px;
-    }
-
-        .list > li {
-            display: inline-block;
-        }
-</style>
 
 <!--================Banner Area =================-->
 <section class="banner_area">
@@ -28,7 +19,7 @@
     </div>
     @if (User.Identity.IsAuthenticated)
     {
-        <div class="hotel_booking_area position">
+        <div class="hotel_booking_area position mb-md-5">
             @using (Html.BeginForm("Booking", "Home", FormMethod.Post))
             {
                 @Html.AntiForgeryToken()
@@ -44,11 +35,10 @@
                                     <div class="col-md-8">
                                         <div class="book_tabel_item">
                                             <div class="form-group">
-                                                <div class="input-group">
-                                                    @Html.DropDownList("BedroomId", (SelectList)ViewBag.BedroomId, htmlAttributes: new { @class = "w-100 list-inline", @name = "bedroomId", @placeholder = "Escolha um quarto..." })
-                                                    <span class="input-group-addon">
-                                                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                                                    </span>
+                                                <div class="input-group-icon mb-3">
+                                                    <div class="icon"><i class="fa fa-plane" aria-hidden="true"></i></div>
+                                                    @Html.DropDownList("BedroomId", (SelectList)ViewBag.BedroomId, htmlAttributes: new { @id = "default-select", @class = "form-select", @name = "bedroomId", @placeholder = "Escolha um quarto..." })
+
                                                 </div>
                                                 <div class="input-group date" id="">
                                                     <input type="date" id="dataentrada" name="dateCheckin" class="form-control" placeholder="Data do Checkin..." required />
@@ -87,37 +77,7 @@
     }
 </section>
 <!--================Banner Area =================-->
-<!--================ Accomodation Area  =================-->
-<section class="accomodation_area section_gap" style="display:none" id="quartos">
-    <div class="container">
-        <div class="section_title text-center">
-            <h2 class="title_color">Acomodações do Hotel</h2>
-            <p>We all live in an age that belongs to the young at heart. Life that is becoming extremely fast, </p>
-        </div>
-        <div class="row mb_30">
 
-            @foreach (var item in Model.Bedroom)
-            {
-                <div class="d-flex justify-content-center col-sm-6 col-md-4 col-lg-3">
-                    <div class="card rounded-3 m-2" style="width: 16rem;">
-                        <img src="@Url.Action("GetImageBedroom","Home", new { id = item.Id })" alt="imagem do quarto" />
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                Nome do quarto:@Html.DisplayFor(modelItem => item.NameBedroom)
-                            </h5>
-                            <p class="card-text">Descrição: @Html.DisplayFor(modelItem => item.Description)</p>
-                            @*<a class="btn btn-primary" title="Detalhes" href="@Url.Action("DetalhesQuarto", "Terminal", new { id = item.Id })">
-                                    Visualizar Quarto
-                                </a>*@
-
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
-</section>
-<!--================ Accomodation Area  =================-->
 <!--================ Facilities Area  =================-->
 <section class="facilities_area section_gap">
     <div class="overlay bg-parallax" data-stellar-ratio="0.8" data-stellar-vertical-offset="0" data-background="">
@@ -169,7 +129,7 @@
 </section>
 <!--================ Facilities Area  =================-->
 <!--================ About History Area  =================-->
-<section class="about_history_area section_gap">
+<section class="about_history_area section_gap mt-md-5">
     <div class="container">
         <div class="row">
             <div class="col-md-6 d_flex align-items-center">
@@ -194,54 +154,25 @@
             <p>The French Revolution constituted for the conscience of the dominant aristocratic class a fall from </p>
         </div>
         <div class="row mb_30">
-            <div class="col-lg-4 col-md-6">
-                <div class="single-recent-blog-post">
-                    <div class="thumb">
-                        <img class="img-fluid" src="~/Content/image/eventos/blog-1.jpg" alt="post">
-                    </div>
-                    <div class="details">
-                        <div class="tags">
-                            <a href="#" class="button_hover tag_btn">Bar</a>
-                            <a href="#" class="button_hover tag_btn">Eventos Noturnos</a>
+            @foreach (var item in Model.Event)
+            {
+                <div class="col-lg-4 col-md-6">
+                    <div class="single-recent-blog-post">
+                        <div class="thumb">
+                            <img class="img-fluid" src="@Url.Action("GetImageEvent","Home", new { id = item.Id })" alt="post">
                         </div>
-                        <a href="#"><h4 class="sec_h4">Bar</h4></a>
-                        <p>Acres of Diamonds… you’ve read the famous story, or at least had it related to you. A farmer.</p>
-                        <h6 class="date title_color">01/01/2023</h6>
+                        <div class="details">
+                            <div class="tags">
+                                <a href="#" class="button_hover tag_btn">@Html.DisplayFor(modelItem => item.NameEvent)</a>
+                                <a href="#" class="button_hover tag_btn">@Html.DisplayFor(modelItem => item.Organizer)</a>
+                            </div>
+                            <a href="#"><h4 class="sec_h4">@Html.DisplayFor(modelItem => item.TypeEvent)</h4></a>
+                            <p>@Html.DisplayFor(modelItem => item.DescriptionEvent).</p>
+                            <h6 class="date title_color">@Html.DisplayFor(modelItem => item.DateEvent)</h6>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="single-recent-blog-post">
-                    <div class="thumb">
-                        <img class="img-fluid" src="~/Content/image/eventos/blog-2.jpg" alt="post">
-                    </div>
-                    <div class="details">
-                        <div class="tags">
-                            <a href="#" class="button_hover tag_btn">Balada</a>
-                            <a href="#" class="button_hover tag_btn">Eventos Noturnos</a>
-                        </div>
-                        <a href="#"><h4 class="sec_h4">Balada</h4></a>
-                        <p>Self-doubt and fear interfere with our ability to achieve or set goals. Self-doubt and fear are</p>
-                        <h6 class="date title_color">01/01/2023</h6>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="single-recent-blog-post">
-                    <div class="thumb">
-                        <img class="img-fluid" src="~/Content/image/eventos/blog-3.jpg" alt="post">
-                    </div>
-                    <div class="details">
-                        <div class="tags">
-                            <a href="#" class="button_hover tag_btn">Comida</a>
-                            <a href="#" class="button_hover tag_btn">Eventos Gastronomicos</a>
-                        </div>
-                        <a href="#"><h4 class="sec_h4">Restaurante</h4></a>
-                        <p>Lorem ipsum dolor sit amet. Ut vitae enim et dignissimos.</p>
-                        <h6 class="date title_color">01/01/2023</h6>
-                    </div>
-                </div>
-            </div>
+            }
         </div>
     </div>
 </section>
