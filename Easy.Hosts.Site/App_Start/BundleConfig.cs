@@ -7,21 +7,33 @@ namespace Easy.Hosts.Site
     {
         public static void RegisterBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js"));
+            bundles.Add(new ScriptBundle("~/bundles/js").Include(
+                        "~/Scripts/jquery-3.2.1.min.js",
+                        "~/Scripts/bootstrap.min.js",
+                        "~/Scripts/custom.js",
+                        "~/Scripts/stellar.js",
+                        "~/Scripts/popper.js",
+                        "~/Content/vendors/nice-select/jquery.nice-select.min.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-                        "~/Scripts/jquery.validate*"));
-
-            bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
-                        "~/Scripts/modernizr-*"));
-
-            bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/css/_elements.css",
+                      "~/Content/css/_footer.css",
+                      "~/Content/css/_testmonial.css",
+                      "~/Content/css/_variables.css",
+                      "~/Content/css/bootstrap.css",
+                      "~/Content/css/font-awesome.min.css",
+                      "~/Content/css/responsive.css",
+                      "~/Content/css/style-royal-template.map",
+                      "~/Content/css/style-royal.css",
+                      "~/Content/css/style.css",
+                      "~/Content/vendors/linericon/linericon_style.css",
+                      "~/Content/vendors/linericon/Linearicons-Free.woff",
+                      "~/Content/vendors/linericon/Linearicons-Free.woff2",
+                      "~/Content/vendors/nice-select/css/nice-select.css"));
+
+         
+
         }
     }
 }

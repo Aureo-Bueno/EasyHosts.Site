@@ -5,6 +5,7 @@
 }
 
 
+
 <!--================Banner Area =================-->
 <section class="banner_area">
     <div class="booking_table d_flex align-items-center">
@@ -36,12 +37,11 @@
                                         <div class="book_tabel_item">
                                             <div class="form-group">
                                                 <div class="input-group-icon mb-3">
-                                                    <div class="icon"><i class="fa fa-plane" aria-hidden="true"></i></div>
-                                                    @Html.DropDownList("BedroomId", (SelectList)ViewBag.BedroomId, htmlAttributes: new { @id = "default-select", @class = "form-select", @name = "bedroomId", @placeholder = "Escolha um quarto..." })
+                                                    @Html.DropDownList("BedroomId", (SelectList)ViewBag.BedroomId, htmlAttributes: new { @id = "default-select", @class = "form-control", @name = "bedroomId", @placeholder = "Escolha um quarto..." })
 
                                                 </div>
                                                 <div class="input-group date" id="">
-                                                    <input type="date" id="dataentrada" name="dateCheckin" class="form-control" placeholder="Data do Checkin..." required />
+                                                    <input type="date" name="dateCheckin" class="form-control" placeholder="Data do Checkin..." required />
                                                 </div>
                                                 <div class="input-group date" id="">
                                                     <input type="date" name="dateCheckout" class="form-control" placeholder="Data do Checkout..." required />
@@ -77,7 +77,6 @@
     }
 </section>
 <!--================Banner Area =================-->
-
 <!--================ Facilities Area  =================-->
 <section class="facilities_area section_gap">
     <div class="overlay bg-parallax" data-stellar-ratio="0.8" data-stellar-vertical-offset="0" data-background="">

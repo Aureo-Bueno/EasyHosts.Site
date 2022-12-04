@@ -8,19 +8,8 @@
     <link rel="icon" href="~/Content/image/favicon.png" type="image/png">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 
-    @Styles.Render("~/Content/Css/style_copy.css")
-    @Styles.Render("~/Content/Css/_elements.css")
-    @Styles.Render("~/Content/Css/_footer.css")
-    @Styles.Render("~/Content/Css/_testimonial.css")
-    @Styles.Render("~/Content/Css/_variables.css")
-    @Styles.Render("~/Content/Css/bootstrap.css")
-    @Styles.Render("~/Content/Css/bootstrap-datetimepicker.min.css")
-    @Styles.Render("~/Content/Css/font-awesome.min.css")
-    @Styles.Render("~/Content/Css/linericon_style.css")
-    @Styles.Render("~/Content/Css/nice-select.css")
-    @Styles.Render("~/Content/Css/owl.carousel.min.css")
-    @Styles.Render("~/Content/Css/responsive.css")
-    @Styles.Render("~/Content/Css/style.css")
+    @Styles.Render("~/Content/css")
+
 </head>
 <body>
 
@@ -51,7 +40,7 @@
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Olá @User.Identity.Name.Split('|')[1]</a>
                                 <ul class="dropdown-menu">
                                     <li class="nav-item">@Html.ActionLink("Sair", "Logout", "Home", null, new { @class = "nav-link" })</li>
-                                    <a class="nav-item" href="@Url.Action("MeuPerfil", "Home", new { id = User.Identity.Name.Split('|')[0] })">Meu Perfil</a>
+                                    <a class="nav-item" href="@Url.Action("MeuPerfil", "Home", new { id = User.Identity.Name.Split('|')[0] })"><li class="nav-link">Meu Perfil</li></a>
                                 </ul>
                             </li>
 
@@ -70,7 +59,7 @@
             <div class="row">
                 <div class="col-lg-3  col-md-6 col-sm-6">
                     <div class="single-footer-widget">
-                        <h6 class="footer_title">About Agency</h6>
+                        <h6 class="footer_title">Sobre nós</h6>
                         <p>The world has become so fast paced that people don’t want to stand by reading a page of information, they would much rather look at a presentation and understand the message. It has come to a point </p>
                     </div>
                 </div>
@@ -80,8 +69,13 @@
                         <div class="row">
                             <div class="col-4">
                                 <ul class="list_style">
-                                    <li><a href="#">Home</a></li>
-                                    <li><a href="#">Quartos</a></li>
+                                    <li>@Html.ActionLink("Tela Inicial", "Index", "Home", null, new { @class = "" })</li>
+                                    <li>@Html.ActionLink("Tela de Quartos", "Quartos", "Home", null, new { @class = "" })</li>
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <li class="nav-item">@Html.ActionLink("Sair", "Logout", "Home", null, new { @class = "" })</li>
+                                        <a class="nav-item" href="@Url.Action("MeuPerfil", "Home", new { id = User.Identity.Name.Split('|')[0] })"> <li class="nav-link">Meu Perfil</li></a>
+                                    }
                                 </ul>
                             </div>
                         </div>
@@ -91,7 +85,7 @@
             <div class="border_line"></div>
             <div class="row footer-bottom d-flex justify-content-between align-items-center">
                 <p class="col-lg-8 col-sm-12 footer-text m-0">
-                    Copyright &copy;  @DateTime.Now Todos os diretos reservados.</a>
+                  Easy Hosts &copy;  @DateTime.Now Todos os diretos reservados.</a>
                 </p>
             </div>
         </div>
@@ -99,21 +93,8 @@
     <!--================ End footer Area  =================-->
 
 
-    @Scripts.Render("~/Scripts/jquery-3.2.1.min.js")
-    @Scripts.Render("~/Scripts/popper.js")
-    @Scripts.Render("~/Scripts/bootstrap.min.js")
-    @Scripts.Render("~/Scripts/owl.carousel.min.js")
-    @Scripts.Render("~/Scripts/jquery.ajaxchimp.min.js")
-    @Scripts.Render("~/Scripts/mail-script.js")
-    @Scripts.Render("~/Scripts/bootstrap-datetimepicker.min.js")
-    @Scripts.Render("~/Scripts/jquery.nice-select.min.js")
-    @Scripts.Render("~/Scripts/simpleLightbox.min.js")
-    @Scripts.Render("~/Scripts/stellar.js")
-    @Scripts.Render("~/Scripts/jquery.validate.min.js")
-    @Scripts.Render("~/Scripts/jquery.form.js")
-    @Scripts.Render("~/Scripts/gmaps.min.js")
-    @Scripts.Render("~/Scripts/custom.js")
-    @Scripts.Render("~/Scripts/contact.js")
+    @Scripts.Render("~/bundles/js")
+ 
 
     @RenderSection("scripts", required: false)
 
@@ -143,18 +124,6 @@
             });
         </script>
     }
-
-    <script>
-        $(document).ready(function () {
-            $('#dataentrada').on('change', function () {
-                if (this.value != '0000-00-00 00:00') {
-                    $("#quartos").show();
-                } else {
-                    $("#quartos").hide();
-                }
-            });
-        });
-    </script>
 
 </body>
 </html>

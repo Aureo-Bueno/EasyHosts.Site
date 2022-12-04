@@ -2,6 +2,7 @@
 using Easy.Hosts.Site.Models;
 using Easy.Hosts.Site.Models.Enums;
 using Easy.Hosts.Site.Models.ViewModel;
+using Easy.Hosts.Site.Services.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -19,7 +20,7 @@ namespace Easy.Hosts.Site.Controllers
         public ActionResult Index()
         {
             SiteViewModel siteViewModel = new SiteViewModel();
-            ViewBag.BedroomId = new SelectList(db.Bedroom, "Id", "NameBedroom");
+            ViewBag.BedroomId = new SelectList(db.Bedroom.Where(w => w.Status == BedroomStatus.Disponivel), "Id", "NameBedroom");
             return View(siteViewModel);
         }
 
@@ -100,9 +101,11 @@ namespace Easy.Hosts.Site.Controllers
                     return View(register);
                 }
 
-                string msg = "<h3>Easy Hosts</h3>";
-                msg += "Para confirmar sua conta acesse <a href='https://localhost:44301/Home/ConfirmarConta/" + user.Hash + "'target = '_blank'>clique aqui</a>";
-                Functions.SendEmail(user.Email, "Confirmacao de conta criada no Easy Hosts", msg);
+                string msg = "<h3>Uma conta com este endereço de email foi criada!</h3>";
+                msg += "<br/>";
+                msg += "<br/>";
+                msg += "Para confirmar sua conta acesse <a href='https://localhost:44301/Home/ConfirmarConta/"+user.Hash+" 'target = '_blank'>Confirmar Conta</a>";
+                Functions.SendEmail(user.Email, "Confirmação de conta criada no Easy Hosts", msg);
 
                 db.User.Add(user);
                 await db.SaveChangesAsync();
@@ -120,18 +123,22 @@ namespace Easy.Hosts.Site.Controllers
         }
 
         [Authorize]
-
         public async Task<ActionResult> MeuPerfil(int? id)
         {
-            if (id == null)
+            bool hasAny = await db.User.AnyAsync(a => a.Id == id);
+
+            if (!hasAny)
             {
-                return RedirectToAction("Index");
+                throw new NotFoundException("Id not Found!");
             }
 
-            User user = await db.User.FindAsync(id);
+            var user = await db.User
+                .Include(i => i.Perfil)
+                .FirstOrDefaultAsync(f => f.Id == id);
 
             if (user == null)
             {
+                TempData["MSG"] = "error|Usuario nao existe!";
                 return RedirectToAction("Index");
             }
 
@@ -155,33 +162,55 @@ namespace Easy.Hosts.Site.Controllers
                     TempData["MSG"] = "info|Preencha a data de checkin";
                     return RedirectToAction("Index");
                 }
-                Bedroom bedroom = db.Bedroom.Where(w => w.Id == bedroomId).FirstOrDefault();
+                try
+                {
+                    Bedroom bedroom = db.Bedroom.Where(w => w.Id == bedroomId).FirstOrDefault();
 
-                booking.CodeBooking = Functions.CodeBookigSort();
-                booking.Status = BookingStatus.Voucher;
-                booking.DateCheckin = dateCheckin.AddHours(14);
-                booking.DateCheckout = dateCheckout.AddHours(12);
-                booking.UserId = userId;
-                booking.BedroomId = bedroom.Id;
-                booking.ValueBooking = Functions.QuantityDaysBooking(dateCheckin, dateCheckout, bedroom.Value);
+                    booking.CodeBooking = Functions.CodeBookigSort();
+                    booking.Status = BookingStatus.Voucher;
+                    booking.DateCheckin = dateCheckin.AddHours(14);
+                    booking.DateCheckout = dateCheckout.AddHours(12);
+                    booking.UserId = userId;
+                    booking.BedroomId = bedroom.Id;
+                    booking.ValueBooking = Functions.QuantityDaysBooking(dateCheckin, dateCheckout, bedroom.Value);
 
-                db.Booking.Add(booking);
-                await db.SaveChangesAsync();
+                    db.Booking.Add(booking);
+                    await db.SaveChangesAsync();
 
-                bedroom.Status = BedroomStatus.Reservado;
-                db.Entry(bedroom).State = EntityState.Modified;
-                db.SaveChanges();
+                    bedroom.Status = BedroomStatus.Reservado;
+                    db.Entry(bedroom).State = EntityState.Modified;
+                    db.SaveChanges();
 
-                User user = db.User.Where(x => x.Id == booking.UserId).FirstOrDefault();
+                    User user = db.User.Where(x => x.Id == booking.UserId).FirstOrDefault();
 
 
-                string msg = "<h3>RESERVA DO SITE EASY HOSTS</h3>";
-                msg += "Link para pagamento:  <a href='https://localhost:44348/' target='_blank'>Pagar</a>";
-                msg += "Codigo para o checkin" + booking.CodeBooking;
-                Functions.SendEmail(user.Email, "Link de pagamento da reserva ", msg);
+                    string msg = "<h3 style='text-align: center;'>RESERVA DO SITE EASY HOSTS</h3>";
+                    msg += "<br/>";
+                    msg += "<br/>";
+                    msg += "Link para pagamento via pix:  <a href='https://localhost:44348/' target='_blank'>Pagamento com pix</a>";
+                    msg += "<br/>";
+                    msg += "<br/>";
+                    msg += "Link para pagamento via débito:  <a href='https://localhost:44348/' target='_blank'>Pagamento com débito</a>";
+                    msg += "<br/>";
+                    msg += "<br/>";
+                    msg += "Link para pagamento via crédito:  <a href='https://localhost:44348/' target='_blank'>crédito</a>";
+                    msg += "<br/>";
+                    msg += "<br/>";
+                    msg += "Codigo para a sua Reserva: " + booking.CodeBooking;
+                    msg += "<br/>";
+                    msg += "<br/>";
+                    msg += "O pagamento deverá ser efetuado em 24h, caso contrário será cancelado a reserva.";
+                    Functions.SendEmail(user.Email, "Link de pagamento da reserva ", msg);
 
-                TempData["MSG"] = "success|Reserva realizada com sucesso, verifique seu email o link de pagamento";
-                return RedirectToAction("Index");
+                    TempData["MSG"] = "success|Reserva realizada com sucesso, verifique seu email o link de pagamento";
+                    return RedirectToAction("Index");
+                }
+                catch (Exception)
+                {
+                    TempData["MSG"] = "info|Erro ao fazer a reserva, tente novamente mais tarde.";
+                    return RedirectToAction("Index");
+                }
+              
             }
 
             TempData["MSG"] = "info|Erro ao fazer a reserva, verifique os campos e tente novamente";
@@ -260,7 +289,7 @@ namespace Easy.Hosts.Site.Controllers
                     user.Status = 1;
                     db.Entry(user).State = EntityState.Modified;
                     db.SaveChanges();
-                    TempData["MSG"] = "success|Senha conta foi ativida com sucesso!";
+                    TempData["MSG"] = "success|Sua conta foi ativida com sucesso!";
                     return RedirectToAction("Index");
                 }
                 TempData["MSG"] = "error|E-mail não encontrado!";

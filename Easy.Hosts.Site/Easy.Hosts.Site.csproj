@@ -147,17 +147,16 @@
     <Compile Include="Models\ViewModel\SiteViewModel.cs" />
     <Compile Include="Models\ViewModel\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Exceptions\DbConcurrencyException.cs" />
+    <Compile Include="Services\Exceptions\IntegrityException.cs" />
+    <Compile Include="Services\Exceptions\NotFoundException.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\css\bootstrap-datetimepicker.min.css" />
     <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\css\font-awesome.min.css" />
-    <Content Include="Content\css\linericon_style.css" />
-    <Content Include="Content\css\nice-select.css" />
-    <Content Include="Content\css\owl.carousel.min.css" />
     <Content Include="Content\css\responsive.css" />
+    <Content Include="Content\css\style-royal.css" />
     <Content Include="Content\css\style.css" />
-    <Content Include="Content\css\style_copy.css" />
     <Content Include="Content\css\_elements.css" />
     <Content Include="Content\css\_footer.css" />
     <Content Include="Content\css\_testimonial.css" />
@@ -172,10 +171,14 @@
     <Content Include="Content\image\logo_nav_3.png" />
     <Content Include="Content\image\logo_nav_4.png" />
     <Content Include="Content\image\logo_nav_5.png" />
+    <Content Include="Content\vendors\linericon\Linearicons-Free.svg" />
+    <Content Include="Content\vendors\linericon\linericon_style.css" />
+    <Content Include="Content\vendors\nice-select\css\nice-select.css" />
+    <Content Include="Content\vendors\nice-select\css\style.css" />
+    <Content Include="Content\vendors\nice-select\js\jquery.nice-select.js" />
+    <Content Include="Content\vendors\nice-select\js\jquery.nice-select.min.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
-    <Content Include="Scripts\bootstrap-select.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\contact.js" />
     <Content Include="Scripts\custom.js" />
@@ -183,12 +186,9 @@
     <Content Include="Scripts\jquery-3.2.1.min.js" />
     <Content Include="Scripts\jquery.ajaxchimp.min.js" />
     <Content Include="Scripts\jquery.form.js" />
-    <Content Include="Scripts\jquery.nice-select.min.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\mail-script.js" />
-    <Content Include="Scripts\owl.carousel.min.js" />
     <Content Include="Scripts\popper.js" />
-    <Content Include="Scripts\simpleLightbox.min.js" />
     <Content Include="Scripts\stellar.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -206,6 +206,12 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\css\style-royal-template.map" />
+    <Content Include="Content\css\style.css.map" />
+    <Content Include="Content\vendors\linericon\Linearicons-Free.eot" />
+    <Content Include="Content\vendors\linericon\Linearicons-Free.ttf" />
+    <Content Include="Content\vendors\linericon\Linearicons-Free.woff" />
+    <Content Include="Content\vendors\linericon\Linearicons-Free.woff2" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\MeuPerfil.cshtml" />

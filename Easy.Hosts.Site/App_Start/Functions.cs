@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Easy.Hosts.Site.Models;
+using System;
 using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
