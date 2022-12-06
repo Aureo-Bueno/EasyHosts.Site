@@ -20,8 +20,7 @@ namespace Easy.Hosts.Site
         }
         protected void Application_PostAuthenticateRequest(Object sender, EventArgs e)
         {
-            var authCookie =
-            HttpContext.Current.Request.Cookies[FormsAuthentication.FormsCookieName];
+            var authCookie = HttpContext.Current.Request.Cookies[FormsAuthentication.FormsCookieName];
             if (authCookie != null)
             {
                 FormsAuthenticationTicket authTicket = FormsAuthentication.Decrypt(authCookie.Value);

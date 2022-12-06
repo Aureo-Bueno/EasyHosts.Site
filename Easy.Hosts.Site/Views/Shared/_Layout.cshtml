@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 
     @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/bootstrap-icons")
 
 </head>
 <body>
@@ -40,7 +41,8 @@
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Olá @User.Identity.Name.Split('|')[1]</a>
                                 <ul class="dropdown-menu">
                                     <li class="nav-item">@Html.ActionLink("Sair", "Logout", "Site", null, new { @class = "nav-link" })</li>
-                                    <a class="nav-item" href="@Url.Action("MeuPerfil", "Site", new { id = User.Identity.Name.Split('|')[0] })"><li class="nav-link">Meu Perfil</li></a>
+                                    <a class="nav-item" href="@Url.Action("MeuPerfil", "Site", new { id = User.Identity.Name.Split('|')[0] })">
+                                    <li class="nav-link">Meu Perfil</li></a>
                                 </ul>
                             </li>
 
@@ -74,7 +76,8 @@
                                     @if (User.Identity.IsAuthenticated)
                                     {
                                         <li class="nav-item">@Html.ActionLink("Sair", "Logout", "Site", null, new { @class = "" })</li>
-                                        <a class="nav-item" href="@Url.Action("MeuPerfil", "Site", new { id = User.Identity.Name.Split('|')[0] })"> <li class="nav-link">Meu Perfil</li></a>
+                                        <a class="nav-item" href="@Url.Action("MeuPerfil", "Site", new { id = User.Identity.Name.Split('|')[0] })">
+                                        <li class="nav-link">Meu Perfil</li></a>
                                     }
                                 </ul>
                             </div>
@@ -85,7 +88,7 @@
             <div class="border_line"></div>
             <div class="row footer-bottom d-flex justify-content-between align-items-center">
                 <p class="col-lg-8 col-sm-12 footer-text m-0">
-                  Easy Hosts &copy;  @DateTime.Now Todos os diretos reservados.</a>
+                    Easy Hosts &copy;  @DateTime.Now Todos os diretos reservados.</a>
                 </p>
             </div>
         </div>
@@ -94,7 +97,7 @@
 
 
     @Scripts.Render("~/bundles/js")
- 
+
 
     @RenderSection("scripts", required: false)
 

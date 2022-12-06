@@ -32,7 +32,14 @@ namespace Easy.Hosts.Site
                       "~/Content/vendors/linericon/Linearicons-Free.woff2",
                       "~/Content/vendors/nice-select/css/nice-select.css"));
 
-         
+            bundles.Add(new StyleBundle("~/Content/bootstrap-icons").Include(
+                   "~/Content/bootstrap-icons/bootstrap-icons.css",
+                   "~/Content/bootstrap-icons/bootstrap-icons.json",
+                   "~/Content/bootstrap-icons/bootstrap-icons.scss",
+                   "~/Content/bootstrap-icons/fonts/bootstrap-icons.woff",
+                   "~/Content/bootstrap-icons/fonts/bootstrap-icons.woff2"));
+
+
 
         }
     }

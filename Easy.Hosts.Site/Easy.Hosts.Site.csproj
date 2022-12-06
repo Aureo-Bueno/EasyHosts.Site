@@ -124,6 +124,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\CustomValidationCPFAttribute.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\Functions.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -146,14 +147,20 @@
     <Compile Include="Models\TypeBedroom.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\ViewModel\SiteViewModel.cs" />
+    <Compile Include="Models\ViewModel\UserAccessViewModel.cs" />
+    <Compile Include="Models\ViewModel\UserActiveAccountViewModel.cs" />
     <Compile Include="Models\ViewModel\UserBookingViewModel.cs" />
-    <Compile Include="Models\ViewModel\UserViewModel.cs" />
+    <Compile Include="Models\ViewModel\UserForgotPasswordViewModel.cs" />
+    <Compile Include="Models\ViewModel\UserMessageViewModel.cs" />
+    <Compile Include="Models\ViewModel\UserRedefinePasswordViewModel.cs" />
+    <Compile Include="Models\ViewModel\UserRegisterViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Exceptions\DbConcurrencyException.cs" />
     <Compile Include="Services\Exceptions\IntegrityException.cs" />
     <Compile Include="Services\Exceptions\NotFoundException.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-icons\bootstrap-icons.css" />
     <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\css\font-awesome.min.css" />
     <Content Include="Content\css\responsive.css" />
@@ -184,6 +191,7 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\contact.js" />
     <Content Include="Scripts\custom.js" />
+    <Content Include="Scripts\CustomValidation.js" />
     <Content Include="Scripts\gmaps.min.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
     <Content Include="Scripts\jquery.ajaxchimp.min.js" />
@@ -214,6 +222,10 @@
     <Content Include="Content\vendors\linericon\Linearicons-Free.ttf" />
     <Content Include="Content\vendors\linericon\Linearicons-Free.woff" />
     <Content Include="Content\vendors\linericon\Linearicons-Free.woff2" />
+    <Content Include="Content\bootstrap-icons\bootstrap-icons.json" />
+    <Content Include="Content\bootstrap-icons\bootstrap-icons.scss" />
+    <Content Include="Content\bootstrap-icons\fonts\bootstrap-icons.woff" />
+    <Content Include="Content\bootstrap-icons\fonts\bootstrap-icons.woff2" />
     <None Include="packages.config" />
     <Content Include="Views\Site\Index.cshtml" />
     <Content Include="Views\Site\MeuPerfil.cshtml" />

@@ -2,6 +2,22 @@
 @{
     ViewBag.Title = "Error500";
 }
+<section class="section-top-border bg-light">
 
-<h2>Error500</h2>
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="card text-center">
+                    <div class="card-body p-5">
+                        <h1 class="h1 mt-5"><span class="text-danger">Erro 500</span> - Requisição nao terminada ou erro de Servidor!</h1>
+                        <p class="lead text-center mt-5">
+                            Voltar para a página de inicio
+                        </p>
+                        <a href="@Url.Action("Index", "Site", new { area = "" })" class="btn btn-light p-3"><i class="bi bi-house-fill text-dark fs-4"></i></a>
+                    </div>
+                </div>
+            </div>
 
+        </div>
+    </div>
+</section>

@@ -4,7 +4,6 @@ using Easy.Hosts.Site.Models.Enums;
 using Easy.Hosts.Site.Models.ViewModel;
 using Easy.Hosts.Site.Services.Exceptions;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,17 +15,17 @@ namespace Easy.Hosts.Site.Controllers
 {
     public class SiteController : Controller
     {
-        private Context db = new Context();
+        private Context _context = new Context();
         public ActionResult Index()
         {
             SiteViewModel siteViewModel = new SiteViewModel();
-            ViewBag.BedroomId = new SelectList(db.Bedroom.Where(w => w.Status == BedroomStatus.Disponivel), "Id", "NameBedroom");
+            ViewBag.BedroomId = new SelectList(_context.Bedroom.Where(w => w.Status == BedroomStatus.Disponivel), "Id", "NameBedroom");
             return View(siteViewModel);
         }
 
         public ActionResult Quartos()
         {
-            var bedroom = db.Bedroom.Include(i => i.TypeBedroom).Where(w => w.Status == BedroomStatus.Disponivel).ToList();
+            var bedroom = _context.Bedroom.Include(i => i.TypeBedroom).Where(w => w.Status == BedroomStatus.Disponivel).ToList();
             return View(bedroom);
         }
 
@@ -37,10 +36,10 @@ namespace Easy.Hosts.Site.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(Access access, string ReturnUrl)
+        public async Task<ActionResult> Login(UserAccessViewModel access, string ReturnUrl)
         {
             string passcrip = Functions.HashText(access.Password, "SHA512");
-            User user = await db.User.Where(t => t.Email == access.Email && t.Password == passcrip)
+            User user = await _context.User.Where(t => t.Email == access.Email && t.Password == passcrip)
                 .Where(w => w.Status == 1)
                 .FirstOrDefaultAsync();
 
@@ -48,7 +47,7 @@ namespace Easy.Hosts.Site.Controllers
             {
                 FormsAuthentication.SetAuthCookie(user.Id + "|" + user.Name, false);
                 TempData["MSG"] = "success|Logado com Sucesso!";
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Site");
             }
             else
             {
@@ -74,11 +73,11 @@ namespace Easy.Hosts.Site.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(Register register)
+        public async Task<ActionResult> Register(UserRegisterViewModel register)
         {
             if (ModelState.IsValid)
             {
-                if (db.User.Where(x => x.Email == register.Email).ToList().Count > 0)
+                if (_context.User.Where(x => x.Email == register.Email).ToList().Count > 0)
                 {
                     TempData["MSG"] = "warning|E-mail já existe, tente novamente com outro!";
                     return View("Index",register);
@@ -91,7 +90,7 @@ namespace Easy.Hosts.Site.Controllers
                 user.ConfirmPassword = Functions.HashText(register.ConfirmPassword, "SHA512");
                 user.Cpf = register.Cpf;
                 user.Status = 0;
-                user.Perfil = db.Perfil.Find(3);
+                user.Perfil = _context.Perfil.Find(3);
                 user.Hash = Functions.Encode(DateTime.Now.AddDays(1).ToString("yyyy-MM-dd HH:mm:ss.ffff"));
 
 
@@ -101,14 +100,14 @@ namespace Easy.Hosts.Site.Controllers
                     return View(register);
                 }
 
-                string msg = "<h3>Uma conta com este endereço de email foi criada!</h3>";
+                string msg = "<h3 style='text-align: center;'>Uma conta com este endereço de email foi criada!</h3>";
                 msg += "<br/>";
                 msg += "<br/>";
-                msg += "Para confirmar sua conta acesse <a href='https://localhost:44301/Home/ConfirmarConta/"+user.Hash+" 'target = '_blank'>Confirmar Conta</a>";
+                msg += "Para confirmar sua conta acesse: <a href='https://localhost:44301/Site/ConfirmarConta/"+user.Hash+" 'target = '_blank'> Confirmar Conta </a>";
                 Functions.SendEmail(user.Email, "Confirmação de conta criada no Easy Hosts", msg);
 
-                db.User.Add(user);
-                await db.SaveChangesAsync();
+                _context.User.Add(user);
+                await _context.SaveChangesAsync();
                 TempData["MSG"] = "success|Conta criada com sucesso, acesse sua caixa de email para ativacao de conta!";
                 return RedirectToAction("Index");
             }
@@ -125,14 +124,14 @@ namespace Easy.Hosts.Site.Controllers
         [Authorize]
         public async Task<ActionResult> MeuPerfil(int? id)
         {
-            bool hasAny = await db.User.AnyAsync(a => a.Id == id);
+            bool hasAny = await _context.User.AnyAsync(a => a.Id == id);
 
             if (!hasAny)
             {
                 throw new NotFoundException("Id not Found!");
             }
 
-            User user = await db.User
+            User user = await _context.User
                .Include(i => i.Perfil)
                .FirstOrDefaultAsync(f => f.Id == id);
 
@@ -142,7 +141,7 @@ namespace Easy.Hosts.Site.Controllers
                 return RedirectToAction("Index");
             }
 
-            Booking booking = await db.Booking.Include(i => i.User)
+            Booking booking = await _context.Booking.Include(i => i.User)
                 .Include(i => i.Bedroom)
                 .Where(w => w.UserId == id)
                 .FirstOrDefaultAsync();
@@ -158,7 +157,7 @@ namespace Easy.Hosts.Site.Controllers
 
         public async Task<ActionResult> Eventos()
         {
-            var listEvents = await db.Event.ToListAsync();
+            var listEvents = await _context.Event.ToListAsync();
             return View(listEvents);
         }
 
@@ -175,7 +174,7 @@ namespace Easy.Hosts.Site.Controllers
                 }
                 try
                 {
-                    Bedroom bedroom = db.Bedroom.Where(w => w.Id == bedroomId).FirstOrDefault();
+                    Bedroom bedroom = _context.Bedroom.Where(w => w.Id == bedroomId).FirstOrDefault();
 
                     booking.CodeBooking = Functions.CodeBookigSort();
                     booking.Status = BookingStatus.Voucher;
@@ -185,14 +184,14 @@ namespace Easy.Hosts.Site.Controllers
                     booking.BedroomId = bedroom.Id;
                     booking.ValueBooking = Functions.QuantityDaysBooking(dateCheckin, dateCheckout, bedroom.Value);
 
-                    db.Booking.Add(booking);
-                    await db.SaveChangesAsync();
+                    _context.Booking.Add(booking);
+                    await _context.SaveChangesAsync();
 
                     bedroom.Status = BedroomStatus.Reservado;
-                    db.Entry(bedroom).State = EntityState.Modified;
-                    db.SaveChanges();
+                    _context.Entry(bedroom).State = EntityState.Modified;
+                    _context.SaveChanges();
 
-                    User user = db.User.Where(x => x.Id == booking.UserId).FirstOrDefault();
+                    User user = _context.User.Where(x => x.Id == booking.UserId).FirstOrDefault();
 
 
                     string msg = "<h3 style='text-align: center;'>RESERVA DO SITE EASY HOSTS</h3>";
@@ -204,14 +203,20 @@ namespace Easy.Hosts.Site.Controllers
                     msg += "Link para pagamento via débito:  <a href='https://localhost:44348/' target='_blank'>Pagamento com débito</a>";
                     msg += "<br/>";
                     msg += "<br/>";
-                    msg += "Link para pagamento via crédito:  <a href='https://localhost:44348/' target='_blank'>crédito</a>";
+                    msg += "Link para pagamento via crédito:  <a href='https://localhost:44348/' target='_blank'>Pagamento com Crédito</a>";
                     msg += "<br/>";
                     msg += "<br/>";
                     msg += "Codigo para a sua Reserva: " + booking.CodeBooking;
                     msg += "<br/>";
                     msg += "<br/>";
                     msg += "O pagamento deverá ser efetuado em 24h, caso contrário será cancelado a reserva.";
-                    Functions.SendEmail(user.Email, "Link de pagamento da reserva ", msg);
+                    msg += "<br/>";
+                    msg += "Lembrando também que o checkin deverá ser feito na data " + booking.DateCheckin.ToString("dd/MM/yyyy") + " ás 14:00.";
+                    msg += "<br/>";
+                    msg += "<br/>";
+                    msg += "Endereço: Rua Antonio Vilela de Antunes, 289, Jardins, Tocantins.";
+
+                    Functions.SendEmail(user.Email, "E-mail de confirmação de Reserva do Easy Hosts", msg);
 
                     TempData["MSG"] = "success|Reserva realizada com sucesso, verifique seu email o link de pagamento";
                     return RedirectToAction("Index");
@@ -242,14 +247,14 @@ namespace Easy.Hosts.Site.Controllers
         //GET: PEGA O ID DO QUARTO E CONVERTE OS BYTES DO BANCO PARA O TIPO 'image/jpeg'
         public FileContentResult GetImageBedroom(int id)
         {
-            byte[] byteArray = db.Bedroom.Find(id).Picture;
+            byte[] byteArray = _context.Bedroom.Find(id).Picture;
 
             return byteArray != null ? new FileContentResult(byteArray, "image/jpeg") : null;
         }
 
         public FileContentResult GetImageEvent(int id)
         {
-            byte[] byteArray = db.Event.Find(id).Picture;
+            byte[] byteArray = _context.Event.Find(id).Picture;
 
             return byteArray != null ? new FileContentResult(byteArray, "image/jpeg") : null;
         }
@@ -258,8 +263,8 @@ namespace Easy.Hosts.Site.Controllers
         {
             if (!String.IsNullOrEmpty(id))
             {
-                Context db = new Context();
-                var user = db.User.Where(x => x.Hash == id).ToList().FirstOrDefault();
+                Context _context = new Context();
+                var user = _context.User.Where(x => x.Hash == id).ToList().FirstOrDefault();
                 if (user != null)
                 {
                     try
@@ -267,7 +272,7 @@ namespace Easy.Hosts.Site.Controllers
                         DateTime dt = Convert.ToDateTime(Functions.Decode(user.Hash));
                         if (dt > DateTime.Now)
                         {
-                            AtivarConta active = new AtivarConta();
+                            UserActiveAccountViewModel active = new UserActiveAccountViewModel();
                             active.Hash = user.Hash;
                             active.Email = user.Email;
                             return View(active);
@@ -290,25 +295,25 @@ namespace Easy.Hosts.Site.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ConfirmarConta(AtivarConta ativarConta)
+        public ActionResult ConfirmarConta(UserActiveAccountViewModel activeAccount)
         {
             if (ModelState.IsValid)
             {
-                User user = db.User.Where(x => x.Hash == ativarConta.Hash).ToList().FirstOrDefault();
+                User user = _context.User.Where(x => x.Hash == activeAccount.Hash).ToList().FirstOrDefault();
                 if (user != null)
                 {
                     user.Hash = null;
                     user.Status = 1;
-                    db.Entry(user).State = EntityState.Modified;
-                    db.SaveChanges();
+                    _context.Entry(user).State = EntityState.Modified;
+                    _context.SaveChanges();
                     TempData["MSG"] = "success|Sua conta foi ativida com sucesso!";
                     return RedirectToAction("Index");
                 }
                 TempData["MSG"] = "error|E-mail não encontrado!";
-                return View(ativarConta);
+                return View(activeAccount);
             }
             TempData["MSG"] = "warning|Preencha todos os campos!";
-            return View(ativarConta);
+            return View(activeAccount);
         }
 
 

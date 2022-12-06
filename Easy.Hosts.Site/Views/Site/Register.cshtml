@@ -1,4 +1,4 @@
-﻿@model Easy.Hosts.Site.Models.ViewModel.Register
+﻿@model Easy.Hosts.Site.Models.ViewModel.UserRegisterViewModel
 
 @{
     ViewBag.Title = "Register";
@@ -35,8 +35,8 @@
                                         <h4 class="text-center">Criar Conta</h4>
                                         <hr class="bg-dark" />
                                     </div>
-                                    <div class="col-lg-12 col-md-12">
-                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="col-md-12">
+                                        @Html.ValidationSummary(true, "", new { @class = "alert alert-danger text-center" })
                                     </div>
                                     <div class="col-md-6 input-group-icon mt-4">
                                         <div class="icon"><i class="fa fa-user-secret" aria-hidden="true"></i></div>
@@ -45,7 +45,7 @@
                                     </div>
 
                                     <div class="col-md-6 input-group-icon mt-4">
-                                        @Html.EditorFor(model => model.Cpf, new { htmlAttributes = new { @class = "single-input", @placeholder = "Digite seu Cpf...", required = "required" } })
+                                        @Html.EditorFor(model => model.Cpf, new { htmlAttributes = new { @class = "single-input", @placeholder = "Digite seu CPF (Apenas números)", required = "required" } })
                                         @Html.ValidationMessageFor(model => model.Cpf, "", new { @class = "text-danger" })
                                     </div>
 
@@ -77,3 +77,7 @@
         </div>
     </div>
 </section>
+
+@section Scripts {
+    @Scripts.Render("~/Scripts/CustomValidation.js")
+}
