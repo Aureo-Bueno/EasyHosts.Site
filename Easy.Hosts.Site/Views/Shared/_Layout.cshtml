@@ -25,13 +25,13 @@
                 <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                     <ul class="nav navbar-nav menu_nav ml-auto">
 
-                        <li class="nav-item">@Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })</li>
-                        <li class="nav-item">@Html.ActionLink("Quartos", "Quartos", "Home", null, new { @class = "nav-link" })</li>
+                        <li class="nav-item">@Html.ActionLink("Home", "Index", "Site", null, new { @class = "nav-link" })</li>
+                        <li class="nav-item">@Html.ActionLink("Quartos", "Quartos", "Site", null, new { @class = "nav-link" })</li>
 
                         @if (!User.Identity.IsAuthenticated)
                         {
-                            <li class="nav-item">@Html.ActionLink("Logar", "Login", "Home", null, new { @class = "nav-link" })</li>
-                            <li class="nav-item">@Html.ActionLink("Registre-se", "Register", "Home", null, new { @class = "nav-link" })</li>
+                            <li class="nav-item">@Html.ActionLink("Logar", "Login", "Site", null, new { @class = "nav-link" })</li>
+                            <li class="nav-item">@Html.ActionLink("Registre-se", "Register", "Site", null, new { @class = "nav-link" })</li>
                         }
                         @if (User.Identity.IsAuthenticated)
                         {
@@ -39,8 +39,8 @@
                             <li class="nav-item submenu dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Olá @User.Identity.Name.Split('|')[1]</a>
                                 <ul class="dropdown-menu">
-                                    <li class="nav-item">@Html.ActionLink("Sair", "Logout", "Home", null, new { @class = "nav-link" })</li>
-                                    <a class="nav-item" href="@Url.Action("MeuPerfil", "Home", new { id = User.Identity.Name.Split('|')[0] })"><li class="nav-link">Meu Perfil</li></a>
+                                    <li class="nav-item">@Html.ActionLink("Sair", "Logout", "Site", null, new { @class = "nav-link" })</li>
+                                    <a class="nav-item" href="@Url.Action("MeuPerfil", "Site", new { id = User.Identity.Name.Split('|')[0] })"><li class="nav-link">Meu Perfil</li></a>
                                 </ul>
                             </li>
 
@@ -69,12 +69,12 @@
                         <div class="row">
                             <div class="col-4">
                                 <ul class="list_style">
-                                    <li>@Html.ActionLink("Tela Inicial", "Index", "Home", null, new { @class = "" })</li>
-                                    <li>@Html.ActionLink("Tela de Quartos", "Quartos", "Home", null, new { @class = "" })</li>
+                                    <li>@Html.ActionLink("Tela Inicial", "Index", "Site", null, new { @class = "" })</li>
+                                    <li>@Html.ActionLink("Tela de Quartos", "Quartos", "Site", null, new { @class = "" })</li>
                                     @if (User.Identity.IsAuthenticated)
                                     {
-                                        <li class="nav-item">@Html.ActionLink("Sair", "Logout", "Home", null, new { @class = "" })</li>
-                                        <a class="nav-item" href="@Url.Action("MeuPerfil", "Home", new { id = User.Identity.Name.Split('|')[0] })"> <li class="nav-link">Meu Perfil</li></a>
+                                        <li class="nav-item">@Html.ActionLink("Sair", "Logout", "Site", null, new { @class = "" })</li>
+                                        <a class="nav-item" href="@Url.Action("MeuPerfil", "Site", new { id = User.Identity.Name.Split('|')[0] })"> <li class="nav-link">Meu Perfil</li></a>
                                     }
                                 </ul>
                             </div>

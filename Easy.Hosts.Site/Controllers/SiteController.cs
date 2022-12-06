@@ -14,7 +14,7 @@ using System.Web.Security;
 
 namespace Easy.Hosts.Site.Controllers
 {
-    public class HomeController : Controller
+    public class SiteController : Controller
     {
         private Context db = new Context();
         public ActionResult Index()
@@ -91,7 +91,7 @@ namespace Easy.Hosts.Site.Controllers
                 user.ConfirmPassword = Functions.HashText(register.ConfirmPassword, "SHA512");
                 user.Cpf = register.Cpf;
                 user.Status = 0;
-                user.Perfil = db.Perfil.Find(2);
+                user.Perfil = db.Perfil.Find(3);
                 user.Hash = Functions.Encode(DateTime.Now.AddDays(1).ToString("yyyy-MM-dd HH:mm:ss.ffff"));
 
 
@@ -132,9 +132,9 @@ namespace Easy.Hosts.Site.Controllers
                 throw new NotFoundException("Id not Found!");
             }
 
-            var user = await db.User
-                .Include(i => i.Perfil)
-                .FirstOrDefaultAsync(f => f.Id == id);
+            User user = await db.User
+               .Include(i => i.Perfil)
+               .FirstOrDefaultAsync(f => f.Id == id);
 
             if (user == null)
             {
@@ -142,7 +142,18 @@ namespace Easy.Hosts.Site.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View(user);
+            Booking booking = await db.Booking.Include(i => i.User)
+                .Include(i => i.Bedroom)
+                .Where(w => w.UserId == id)
+                .FirstOrDefaultAsync();
+
+            UserBookingViewModel userBookingViewModel = new UserBookingViewModel()
+            {
+                User = user,
+                Booking = booking,
+            };
+
+            return View(userBookingViewModel);
         }
 
         public async Task<ActionResult> Eventos()
@@ -243,11 +254,12 @@ namespace Easy.Hosts.Site.Controllers
             return byteArray != null ? new FileContentResult(byteArray, "image/jpeg") : null;
         }
 
-        public ActionResult ConfirmarConta(string hash)
+        public ActionResult ConfirmarConta(string id)
         {
-            if (!String.IsNullOrEmpty(hash))
+            if (!String.IsNullOrEmpty(id))
             {
-                var user = db.User.Where(x => x.Hash == hash).ToList().FirstOrDefault();
+                Context db = new Context();
+                var user = db.User.Where(x => x.Hash == id).ToList().FirstOrDefault();
                 if (user != null)
                 {
                     try

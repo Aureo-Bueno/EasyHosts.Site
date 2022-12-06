@@ -20,6 +20,7 @@ namespace Easy.Hosts.Site.Models.ViewModel
         [Compare("Password")]
         [Display(Name = "Confirma Senha")]
         public string ConfirmPassword { get; set; }
+
         public string Cpf { get; set; }
     }
 
@@ -33,7 +34,7 @@ namespace Easy.Hosts.Site.Models.ViewModel
         [Required]
         [Display(Name = "Senha:")]
         [DataType(DataType.Password)]
-        //[RegularExpression("((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,12})", ErrorMessage = "A senha deve conter aos menos uma letra maiúscula, minúscula e um número.Deve ser no mínimo 6 caracteres")]
+        [RegularExpression("((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,12})", ErrorMessage = "A senha deve conter aos menos uma letra maiúscula, minúscula e um número.Deve ser no mínimo 6 caracteres")]
         public string Password { get; set; }
     }
 
@@ -63,6 +64,7 @@ namespace Easy.Hosts.Site.Models.ViewModel
         [DataType(DataType.Password)]
         [RegularExpression("((?=.*\\d)(?=.*[a-z])(?=.*[AZ]).{6,12})", ErrorMessage = "A senha deve conter aos menos uma letra maiúscula, minúscula e um número.Deve ser no mínimo 6 caracteres")]
         public string Password { get; set; }
+
         [DataType(DataType.Password)]
         [Compare("Senha")]
         [Display(Name = "Confirma Senha")]
@@ -71,11 +73,11 @@ namespace Easy.Hosts.Site.Models.ViewModel
 
     public class AtivarConta
     {
+        [Required]
         public string Email { get; set; }
         public string Hash { get; set; }
 
-        [DataType(DataType.Password)]
-        [RegularExpression("((?=.*\\d)(?=.*[a-z])(?=.*[AZ]).{6,12})", ErrorMessage = "A senha deve conter aos menos uma letra maiúscula, minúscula e um número.Deve ser no mínimo 6 caracteres")]
+        [Required]
         public string Password { get; set; }
     }
 

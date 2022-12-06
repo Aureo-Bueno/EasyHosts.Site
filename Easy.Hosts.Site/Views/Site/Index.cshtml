@@ -21,7 +21,7 @@
     @if (User.Identity.IsAuthenticated)
     {
         <div class="hotel_booking_area position mb-md-5">
-            @using (Html.BeginForm("Booking", "Home", FormMethod.Post))
+            @using (Html.BeginForm("Booking", "Site", FormMethod.Post))
             {
                 @Html.AntiForgeryToken()
                 <input type="hidden" value="@User.Identity.Name.Split('|')[0]" name="userId" />
@@ -158,7 +158,7 @@
                 <div class="col-lg-4 col-md-6">
                     <div class="single-recent-blog-post">
                         <div class="thumb">
-                            <img class="img-fluid" src="@Url.Action("GetImageEvent","Home", new { id = item.Id })" alt="post">
+                            <img class="img-fluid" src="@Url.Action("GetImageEvent","Site", new { id = item.Id })" alt="post">
                         </div>
                         <div class="details">
                             <div class="tags">

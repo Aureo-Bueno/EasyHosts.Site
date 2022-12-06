@@ -11,7 +11,7 @@
         <div class="page-cover text-center">
             <h2 class="page-cover-tittle">Quartos Disponiveis</h2>
             <ol class="breadcrumb">
-                <li><a href="@Url.Action("Index","Home", new { @class = "" })">Home</a></li>
+                <li><a href="@Url.Action("Index","Site", new { @class = "" })">Home</a></li>
                 <li class="active">Quartos</li>
             </ol>
         </div>
@@ -40,7 +40,7 @@
                     <div class="row">
                         <div class="col-lg-3 col-md-4 col-sm-12 mr-3">
                             <div class="card rounded mt-3" style="width: 22rem;">
-                                <img src="@Url.Action("GetImageBedroom", "Home", new { id = item.Id })" alt="">
+                                <img src="@Url.Action("GetImageBedroom", "Site", new { id = item.Id })" alt="">
                                 <div class="card-body text-center">
                                     <a href="#" class="btn theme_btn button_hover">@Html.DisplayFor(modelItem => item.NameBedroom)</a>
                                     <h4 class="sec_h4">@Html.DisplayFor(modelItem => item.TypeBedroom.NameTypeBedroom)</h4>
