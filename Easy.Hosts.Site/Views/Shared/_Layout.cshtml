@@ -32,7 +32,7 @@
                         @if (!User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">@Html.ActionLink("Logar", "Login", "Site", null, new { @class = "nav-link" })</li>
-                            <li class="nav-item">@Html.ActionLink("Registre-se", "Register", "Site", null, new { @class = "nav-link" })</li>
+                            <li class="nav-item">@Html.ActionLink("Registre-se", "Registrar", "Site", null, new { @class = "nav-link" })</li>
                         }
                         @if (User.Identity.IsAuthenticated)
                         {
@@ -73,12 +73,6 @@
                                 <ul class="list_style">
                                     <li>@Html.ActionLink("Tela Inicial", "Index", "Site", null, new { @class = "" })</li>
                                     <li>@Html.ActionLink("Tela de Quartos", "Quartos", "Site", null, new { @class = "" })</li>
-                                    @if (User.Identity.IsAuthenticated)
-                                    {
-                                        <li class="nav-item">@Html.ActionLink("Sair", "Logout", "Site", null, new { @class = "" })</li>
-                                        <a class="nav-item" href="@Url.Action("MeuPerfil", "Site", new { id = User.Identity.Name.Split('|')[0] })">
-                                        <li class="nav-link">Meu Perfil</li></a>
-                                    }
                                 </ul>
                             </div>
                         </div>

@@ -66,14 +66,14 @@ namespace Easy.Hosts.Site.Controllers
 
         }
 
-        public ActionResult Register()
+        public ActionResult Registrar()
         {
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(UserRegisterViewModel register)
+        public async Task<ActionResult> Registrar(UserRegisterViewModel register)
         {
             if (ModelState.IsValid)
             {
@@ -100,8 +100,13 @@ namespace Easy.Hosts.Site.Controllers
                     return View(register);
                 }
 
-                string msg = "<h3 style='text-align: center;'>Uma conta com este endereço de email foi criada!</h3>";
+                string msg = "<h3 style='text-align: center;'>Conta criada!!</h3>";
                 msg += "<br/>";
+                msg += "<br/>";
+                msg += "<h2>Ola,<b>"+user.Name+ "</b><h2>";
+                msg += "<br/>";
+                msg += "<br/>";
+                msg += "Uma conta foi criada com este endereço de email";
                 msg += "<br/>";
                 msg += "Para confirmar sua conta acesse: <a href='https://localhost:44301/Site/ConfirmarConta/"+user.Hash+" 'target = '_blank'> Confirmar Conta </a>";
                 Functions.SendEmail(user.Email, "Confirmação de conta criada no Easy Hosts", msg);
@@ -141,18 +146,8 @@ namespace Easy.Hosts.Site.Controllers
                 return RedirectToAction("Index");
             }
 
-            Booking booking = await _context.Booking.Include(i => i.User)
-                .Include(i => i.Bedroom)
-                .Where(w => w.UserId == id)
-                .FirstOrDefaultAsync();
 
-            UserBookingViewModel userBookingViewModel = new UserBookingViewModel()
-            {
-                User = user,
-                Booking = booking,
-            };
-
-            return View(userBookingViewModel);
+            return View(user);
         }
 
         public async Task<ActionResult> Eventos()
@@ -196,25 +191,33 @@ namespace Easy.Hosts.Site.Controllers
 
                     string msg = "<h3 style='text-align: center;'>RESERVA DO SITE EASY HOSTS</h3>";
                     msg += "<br/>";
+                    msg += "<h2>Olá," + user.Name +"</h2>";
                     msg += "<br/>";
-                    msg += "Link para pagamento via pix:  <a href='https://localhost:44348/' target='_blank'>Pagamento com pix</a>";
+                    msg += "<p>O pagamento deverá ser efetuado em até <b>24h</b>, caso contrário será cancelado a reserva, segue os links de pagamento:</p>";
+                    msg += "Via pix:  <a href='https://localhost:44348/' target='_blank'>Pagamento com pix</a>";
                     msg += "<br/>";
+                    msg += "Via débito:  <a href='https://localhost:44348/' target='_blank'>Pagamento com débito</a>";
                     msg += "<br/>";
-                    msg += "Link para pagamento via débito:  <a href='https://localhost:44348/' target='_blank'>Pagamento com débito</a>";
-                    msg += "<br/>";
-                    msg += "<br/>";
-                    msg += "Link para pagamento via crédito:  <a href='https://localhost:44348/' target='_blank'>Pagamento com Crédito</a>";
-                    msg += "<br/>";
-                    msg += "<br/>";
-                    msg += "Codigo para a sua Reserva: " + booking.CodeBooking;
+                    msg += "Via crédito:  <a href='https://localhost:44348/' target='_blank'>Pagamento com Crédito</a>";
                     msg += "<br/>";
                     msg += "<br/>";
-                    msg += "O pagamento deverá ser efetuado em 24h, caso contrário será cancelado a reserva.";
+                    msg += "<h2>Dados da Reserva</h2>";
+                    msg += "<p>Codigo para a sua Reserva: <b>" + booking.CodeBooking + "</b><p>";
+                    msg += "<p>Valor do quarto: <b>" + bedroom.Value + "</b><p>";
                     msg += "<br/>";
-                    msg += "Lembrando também que o checkin deverá ser feito na data " + booking.DateCheckin.ToString("dd/MM/yyyy") + " ás 14:00.";
+                    msg += "<p>Valor total da reserva: <b>" + booking.ValueBooking + "</b><p>";
+                    msg += "<br/>";
+                    msg += "<p>Nome do Quarto: <b>" + bedroom.NameBedroom + "</b><p>";
+                    msg += "<br/>";
+                    msg += "Lembrando também que o checkin deverá ser feito na data <b>" + booking.DateCheckin.ToString("dd/MM/yyyy") + "<b> ás 14:00.";
                     msg += "<br/>";
                     msg += "<br/>";
-                    msg += "Endereço: Rua Antonio Vilela de Antunes, 289, Jardins, Tocantins.";
+                    msg += "Endereço:";
+                    msg += "<br/>";
+                    msg += "Rua Antonio Vilela de Antunes, 289, Jardins, Tocantins.";
+                    msg += "<br/>";
+                    msg += "<p>© Copyright 2022. EasyHosts Todos Os Direitos Reservados.</p>";
+
 
                     Functions.SendEmail(user.Email, "E-mail de confirmação de Reserva do Easy Hosts", msg);
 
@@ -299,7 +302,8 @@ namespace Easy.Hosts.Site.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = _context.User.Where(x => x.Hash == activeAccount.Hash).ToList().FirstOrDefault();
+                string passcrip = Functions.HashText(activeAccount.Password, "SHA512");
+                User user = _context.User.Where(x => x.Hash == activeAccount.Hash && x.Password == passcrip).ToList().FirstOrDefault();
                 if (user != null)
                 {
                     user.Hash = null;
@@ -309,14 +313,11 @@ namespace Easy.Hosts.Site.Controllers
                     TempData["MSG"] = "success|Sua conta foi ativida com sucesso!";
                     return RedirectToAction("Index");
                 }
-                TempData["MSG"] = "error|E-mail não encontrado!";
+                TempData["MSG"] = "error|E-mail não encontrado ou senha incorretos!";
                 return View(activeAccount);
             }
             TempData["MSG"] = "warning|Preencha todos os campos!";
             return View(activeAccount);
         }
-
-
-
     }
 }

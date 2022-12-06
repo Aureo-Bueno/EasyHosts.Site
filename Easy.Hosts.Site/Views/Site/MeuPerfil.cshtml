@@ -1,4 +1,4 @@
-﻿@model Easy.Hosts.Site.Models.ViewModel.UserBookingViewModel
+﻿@model Easy.Hosts.Site.Models.User
 
 @{
     ViewBag.Title = "Meu Perfil";
@@ -36,38 +36,6 @@
                         <img class="author_img rounded-circle" src="image/blog/author.png" alt="">
                         <h4> @Html.DisplayFor(model => model.Name)</h4>
                         <p>@Html.DisplayFor(model => model.Email)</p>
-                        <div class="br"></div>
-                    </aside>
-                    <aside class="single_sidebar_widget popular_post_widget">
-                        <h3 class="widget_title">Dados da Reserva</h3>
-                        <div class="media post_item">
-                            <img src="image/blog/post1.jpg" alt="post">
-                            <div class="media-body">
-                                <a href="blog-details.html"><h3>Space The Final Frontier</h3></a>
-                                <p>02 Hours ago</p>
-                            </div>
-                        </div>
-                        <div class="media post_item">
-                            <img src="image/blog/post2.jpg" alt="post">
-                            <div class="media-body">
-                                <a href="blog-details.html"><h3>The Amazing Hubble</h3></a>
-                                <p>02 Hours ago</p>
-                            </div>
-                        </div>
-                        <div class="media post_item">
-                            <img src="image/blog/post3.jpg" alt="post">
-                            <div class="media-body">
-                                <a href="blog-details.html"><h3>Astronomy Or Astrology</h3></a>
-                                <p>03 Hours ago</p>
-                            </div>
-                        </div>
-                        <div class="media post_item">
-                            <img src="image/blog/post4.jpg" alt="post">
-                            <div class="media-body">
-                                <a href="blog-details.html"><h3>Asteroids telescope</h3></a>
-                                <p>01 Hours ago</p>
-                            </div>
-                        </div>
                         <div class="br"></div>
                     </aside>
                     <aside class="single_sidebar_widget ads_widget">

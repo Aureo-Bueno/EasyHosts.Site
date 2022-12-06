@@ -149,7 +149,6 @@
     <Compile Include="Models\ViewModel\SiteViewModel.cs" />
     <Compile Include="Models\ViewModel\UserAccessViewModel.cs" />
     <Compile Include="Models\ViewModel\UserActiveAccountViewModel.cs" />
-    <Compile Include="Models\ViewModel\UserBookingViewModel.cs" />
     <Compile Include="Models\ViewModel\UserForgotPasswordViewModel.cs" />
     <Compile Include="Models\ViewModel\UserMessageViewModel.cs" />
     <Compile Include="Models\ViewModel\UserRedefinePasswordViewModel.cs" />
@@ -173,6 +172,15 @@
     <Content Include="Content\image\about_banner.jpg" />
     <Content Include="Content\image\banner-2.jpg" />
     <Content Include="Content\image\banner_bg.jpg" />
+    <Content Include="Content\image\email\2.png" />
+    <Content Include="Content\image\email\3.png" />
+    <Content Include="Content\image\email\4.png" />
+    <Content Include="Content\image\email\facebook2x.png" />
+    <Content Include="Content\image\email\instagram2x.png" />
+    <Content Include="Content\image\email\INTRO.png" />
+    <Content Include="Content\image\email\logoEH.png" />
+    <Content Include="Content\image\email\twitter2x.png" />
+    <Content Include="Content\image\email\youtube2x.png" />
     <Content Include="Content\image\favicon.png" />
     <Content Include="Content\image\logo.png" />
     <Content Include="Content\image\logo_nav.png" />
@@ -230,7 +238,7 @@
     <Content Include="Views\Site\Index.cshtml" />
     <Content Include="Views\Site\MeuPerfil.cshtml" />
     <Content Include="Views\Site\Login.cshtml" />
-    <Content Include="Views\Site\Register.cshtml" />
+    <Content Include="Views\Site\Registrar.cshtml" />
     <Content Include="Views\Site\ConfirmarConta.cshtml" />
     <Content Include="Views\Site\Quartos.cshtml" />
     <Content Include="Views\Error\Error404.cshtml" />

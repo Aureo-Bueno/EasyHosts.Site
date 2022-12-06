@@ -7,52 +7,57 @@ using System.Text;
 namespace Easy.Hosts.Site.App_Start
 {
     public class Functions
-    {
+{
         public static string HashText(string text, string nameHash)
-        {
+{
             HashAlgorithm algoritmo = HashAlgorithm.Create(nameHash);
             if (algoritmo == null)
             {
-                throw new ArgumentException("Nome de hash incorreto", "nomeHash");
+                throw new ArgumentException("Nomedehashincorreto", "nomeHash");
             }
             byte[] hash = algoritmo.ComputeHash(Encoding.UTF8.GetBytes(text));
             return Convert.ToBase64String(hash);
         }
 
         public static string CodeBookigSort()
-        {
+{
             Random codeBooking = new Random();
             int result = codeBooking.Next(999999);
             return result.ToString();
         }
 
         public static string SendEmail(string emailRecipient, string subject, string bodymessage)
-        {
+{
             try
             {
-                //Cria o endereço de email do remetente
-                MailAddress inemail = new MailAddress("Easy Hosts <hostseasy@gmail.com>");
-                //Cria o endereço de email do destinatário -->
+                //Criaoendereçodeemaildoremetente
+                MailAddress inemail = new MailAddress("EasyHosts<hostseasy@gmail.com>");
+
+                //Criaoendereçodeemaildodestinatário-->
                 MailAddress foremail = new MailAddress(emailRecipient);
+
                 MailMessage message = new MailMessage(inemail, foremail);
+
                 message.IsBodyHtml = true;
-                //Assunto do email
+
+                //Assuntodoemail
                 message.Subject = subject;
-                //Conteúdo do email
+
+                //Conteúdodoemail
                 message.Body = bodymessage;
-                //Prioridade E-mail
+                //PrioridadeE-mail
                 message.Priority = MailPriority.Normal;
-                //Cria o objeto que envia o e-mail
+                //Criaoobjetoqueenviaoe-mail
                 SmtpClient client = new SmtpClient();
-                //Envia o email
+                //Enviaoemail
                 client.Send(message);
-                return "success|E-mail enviado com sucesso";
+                return "success|E-mailenviadocomsucesso";
             }
-            catch { return "error|Erro ao enviar e-mail"; }
+            catch { return "error|Erroaoenviare-mail"; }
         }
 
         public static string Encode(string text)
-        {
+{
             byte[] stringBase64 = new byte[text.Length];
             stringBase64 = Encoding.UTF8.GetBytes(text);
             string encode = Convert.ToBase64String(stringBase64);
@@ -60,7 +65,7 @@ namespace Easy.Hosts.Site.App_Start
         }
 
         public static string Decode(string text)
-        {
+{
             var encode = new UTF8Encoding();
             var utf8Decode = encode.GetDecoder();
             byte[] stringValue = Convert.FromBase64String(text);
@@ -73,11 +78,10 @@ namespace Easy.Hosts.Site.App_Start
         }
 
         public static decimal QuantityDaysBooking(DateTime dateCheckin, DateTime dateCheckout, decimal valueBooking)
-        {
+{
             int days = dateCheckout.Day - dateCheckin.Day;
 
             return days * valueBooking;
         }
-
     }
 }

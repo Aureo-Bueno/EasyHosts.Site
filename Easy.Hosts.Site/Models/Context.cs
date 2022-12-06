@@ -88,8 +88,6 @@ namespace Easy.Hosts.Site.Models
             user.Property(x => x.Cpf).HasColumnName("CPF");
             user.Property(x => x.PerfilId).HasColumnName("PERFIL_ID");
             user.Property(x => x.Hash).HasColumnName("HASH");
-
-
         }
     }
 }
