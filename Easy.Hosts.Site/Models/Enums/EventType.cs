@@ -4,6 +4,10 @@
     {
         Show = 0,
         Comedia = 1,
-        EventosReligiosos = 2
+        Evento = 2,
+        Academicos = 3,
+        Esportivos = 4,
+        Corporativos = 5,
+        Culturais = 6
     }
 }
